@@ -1,7 +1,8 @@
 const Discord = require('discord.js');
+const config = require('./config.json');
 const client = new Discord.Client();
 const prefix = '!';
-const ownerId = '118892076627787776';
+const ownerId = config.ownerId;
 
 client.once('ready', () => {
 	console.log('Ready!');
@@ -41,7 +42,7 @@ const commands = {
 };
 
 
-client.login('NzU3NzU2NjQzODQ3OTYyNzU0.X2lB3g.HP1ZuuqQ2YhbACX0OROOAXHv1cE');
+client.login(config.token);
 
 client.on('ready', () => console.log('Active'));
 
