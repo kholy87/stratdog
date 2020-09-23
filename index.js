@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const prefix = '!';
+const ownerId = '118892076627787776';
 
 client.once('ready', () => {
 	console.log('Ready!');
@@ -33,7 +34,10 @@ const commands = {
     song2: { type: messageType.sound, file: 'song2'},
     twelve: { type: messageType.sound, file: 'twelve'},
     dinosaur: { type: messageType.sound, file: 'dinosaur'},
-    upgrade: { type: messageType.sound, file: 'upgrade'}
+    upgrade: { type: messageType.sound, file: 'upgrade'},
+    earlobe: { type: messageType.sound, file: 'earlobe'},
+    scream: { type: messageType.sound, file: 'scream'},
+    sneeze: { type: messageType.sound, file: 'sneeze'}
 };
 
 
@@ -46,29 +50,35 @@ client.on('message', async message => {
     console.log(message.content);
     let args = message.content.substring(prefix.length).split(' ');
     if (message.content.startsWith(prefix)){
-        let userCommand = commands[args[0]];
-        if (args[0].toLowerCase() === "help"){
-            let helpText = 'Here are the available commands \n```';
-            Object.keys(commands).forEach(function (command){
-                helpText = helpText + prefix + command + '\n';
-            })
-            helpText = helpText + '```';
-            message.channel.send(helpText);
-            return;
-        }
-        if (userCommand !== undefined){
-            if (userCommand.type === messageType.sound){
-                playSoundFile(message, userCommand.file);
-            } else if (userCommand.type === messageType.text) {
-                message.channel.send(userCommand.text);
+        for (let i = 0; i<args.length; i++){
+            let userCommand = commands[args[i]];
+            if (args[i].toLowerCase() === "help"){
+                let helpText = 'Here are the available commands \n```';
+                Object.keys(commands).forEach(function (command){
+                    helpText = helpText + prefix + command + '\n';
+                })
+                helpText = helpText + '```';
+                message.channel.send(helpText);
+                return;
             }
-            if (userCommand.http !== undefined){
-                message.channel.send(userCommand.http);
+            if (args[i].toLowerCase() === 'stop' && message.author.id === ownerId)
+            {
+                //how do i kill the async voice from here????
+                message.voiceChannel.leave();
             }
-        } else {
-            message.channel.send('Command doesn\'t exist, type !help to see available commands')
+            if (userCommand !== undefined){
+                if (userCommand.type === messageType.sound){
+                    playSoundFile(message, userCommand.file);
+                } else if (userCommand.type === messageType.text) {
+                    message.channel.send(userCommand.text);
+                }
+                if (userCommand.http !== undefined){
+                    message.channel.send(userCommand.http);
+                }
+            } else {
+                message.channel.send('Command doesn\'t exist, type !help to see available commands')
+            }
         }
-       
     }
 });
 
