@@ -29,7 +29,11 @@ const commands = {
     wtf: { type: messageType.sound, file: 'wtf'},
     yamero: { type: messageType.sound, file: 'yamero'},
     roasted: { type: messageType.sound, file: 'roasted'},
-    stratus: { type: messageType.text, text: 'OH OH OH OH CODY CODY CODY, BF BF'}
+    stratus: { type: messageType.text, text: 'OH OH OH OH CODY CODY CODY, BF BF'},
+    song2: { type: messageType.sound, file: 'song2'},
+    twelve: { type: messageType.sound, file: 'twelve'},
+    dinosaur: { type: messageType.sound, file: 'dinosaur'},
+    upgrade: { type: messageType.sound, file: 'upgrade'}
 };
 
 
@@ -50,18 +54,21 @@ client.on('message', async message => {
             })
             helpText = helpText + '```';
             message.channel.send(helpText);
-        } else if (userCommand !== undefined){
+            return;
+        }
+        if (userCommand !== undefined){
             if (userCommand.type === messageType.sound){
                 playSoundFile(message, userCommand.file);
             } else if (userCommand.type === messageType.text) {
                 message.channel.send(userCommand.text);
             }
+            if (userCommand.http !== undefined){
+                message.channel.send(userCommand.http);
+            }
         } else {
             message.channel.send('Command doesn\'t exist, type !help to see available commands')
         }
-        if (userCommand.http !== undefined){
-            message.channel.send(userCommand.http);
-        }
+       
     }
 });
 
