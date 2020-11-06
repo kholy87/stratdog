@@ -1,0 +1,36 @@
+{
+  "name": "stratdog",
+  "version": "1.0.0",
+  "description": "Discord bot with simple meme commands",
+  "main": "index.js",
+  "dependencies": {
+    "axios": "^0.21.0",
+    "canvas": "^2.6.1",
+    "discord.js": "^12.4.1",
+    "easytimer.js": "^4.3.0",
+    "easytimer": "^1.1.1",
+    "electron": "^10.1.5",
+    "ffmpeg-static": "^4.2.7",
+    "ytdl-core": "^4.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kholy87/stratdog.git"
+  },
+  "keywords": [
+    "Discord",
+    "Bot",
+    "Stratus",
+    "StratDog"
+  ],
+  "author": "Kevin Holy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kholy87/stratdog/issues"
+  },
+  "homepage": "https://github.com/kholy87/stratdog#readme"
+}
