@@ -15,7 +15,7 @@ client.once('ready', () => {
 	console.log('Booting up...');
 });
 
-const messageType = {sound: 1, text: 2, help: 3, stop: 4, volume: 5, random: 6, ping: 7, wowCountdown: 8, wellnessCheck: 9, raiderio: 10};
+const messageType = {sound: 1, text: 2, help: 3, stop: 4, volume: 5, random: 6, ping: 7, wowCountdown: 8, wellnessCheck: 9, raiderio: 10, gitHub: 11};
 const securityRole = {admin: 3, mod: 2, user: 1};
 
 function setUserRole(userId){
@@ -74,7 +74,8 @@ const commands = {
     anger: { type: messageType.sound, file: 'anger', role: securityRole.user},
     nah: { type: messageType.sound, file: 'nah', role: securityRole.user},
     holy: { type: messageType.sound, file: 'holy', role: securityRole.user},
-    rio: {type: messageType.raiderio, role: securityRole.user}
+    rio: {type: messageType.raiderio, role: securityRole.user},
+    github: {type: messageType.gitHub, role: securityRole.user}
 };
 
 var playlist = [];
@@ -233,6 +234,10 @@ client.on('message', async message => {
                             let checkUser = args[1];
                             let realm = args[2] || "Sargeras";
                             getRaiderIOScores(message, checkUser, realm);
+                            break;
+                        }
+                        case messageType.gitHub: {
+                            message.channel.send('https://github.com/kholy87/stratdog')
                             break;
                         }
                         case messageType.wowCountdown: {
