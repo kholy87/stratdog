@@ -2,6 +2,8 @@ const Discord = require('discord.js');
 const config = require('./config.json');
 const users = require('./users.json');
 const embeds = require('./embeds.js');
+const axios = require('axios');
+const ytdl = require('ytdl-core');
 const playlistEmbeds = require('./playlist.js');
 const timerlib = require('easytimer.js').Timer;
 const client = new Discord.Client();
@@ -13,7 +15,7 @@ client.once('ready', () => {
 	console.log('Booting up...');
 });
 
-const messageType = {sound: 1, text: 2, help: 3, stop: 4, volume: 5, random: 6, ping: 7, wowCountdown: 8, wellnessCheck: 9};
+const messageType = {sound: 1, text: 2, help: 3, stop: 4, volume: 5, random: 6, ping: 7, wowCountdown: 8, wellnessCheck: 9, raiderio: 10};
 const securityRole = {admin: 3, mod: 2, user: 1};
 
 function setUserRole(userId){
@@ -37,7 +39,7 @@ const commands = {
     ability: { type: messageType.sound, file: 'ability', role: securityRole.user},
     laugh1: { type: messageType.sound, file: 'laugh1', role: securityRole.user},
     sorry: { type: messageType.sound, file: 'sorry', role: securityRole.user},
-    smirk: { type: messageType.sound, file: 'smirk', role: securityRole.user},
+    //smirk: { type: messageType.sound, file: 'smirk', role: securityRole.user},
     yeah: { type: messageType.sound, file: 'yeah', role: securityRole.user},
     click: { type: messageType.sound, file: 'click', role: securityRole.user},
     okay: { type: messageType.sound, file: 'okay', role: securityRole.user},
@@ -60,8 +62,8 @@ const commands = {
     earlobe: { type: messageType.sound, file: 'earlobe', role: securityRole.user},
     scream: { type: messageType.sound, file: 'scream', role: securityRole.user},
     sneeze: { type: messageType.sound, file: 'sneeze', role: securityRole.user},
-    pacman: { type: messageType.sound, file: 'pacman', role: securityRole.user},
-    cube: { type: messageType.sound, file: 'cube', role: securityRole.user},
+    //pacman: { type: messageType.sound, file: 'pacman', role: securityRole.user},
+    //cube: { type: messageType.sound, file: 'cube', role: securityRole.user},
     welost: { type: messageType.sound, file: 'welost', role: securityRole.user},
     wtf2: { type: messageType.sound, file: 'wtf2', role: securityRole.user},
     soyouhave: { type: messageType.sound, file: 'soyouhave', role: securityRole.user},
@@ -71,7 +73,8 @@ const commands = {
     yougotme: { type: messageType.sound, file: 'yougotme', role: securityRole.user},
     anger: { type: messageType.sound, file: 'anger', role: securityRole.user},
     nah: { type: messageType.sound, file: 'nah', role: securityRole.user},
-    holy: { type: messageType.sound, file: 'holy', role: securityRole.user}
+    holy: { type: messageType.sound, file: 'holy', role: securityRole.user},
+    rio: {type: messageType.raiderio, role: securityRole.user}
 };
 
 var playlist = [];
@@ -83,6 +86,10 @@ var volume = .7;
 client.login(config.token);
 
 client.on('ready', () => console.log('Logged in and ready to receive commands'));
+
+client.once('reconnecting', () => {
+    console.log('Reconnecting!');
+   });
 
 const applyText = (canvas, text) => {
 	const ctx = canvas.getContext('2d');
@@ -222,8 +229,14 @@ client.on('message', async message => {
                             message.channel.send(`OH OH OH, ` + checkUser + ` wya, wya!`);
                             break;
                         }
+                        case messageType.raiderio: {
+                            let checkUser = args[1];
+                            let realm = args[2] || "Sargeras";
+                            getRaiderIOScores(message, checkUser, realm);
+                            break;
+                        }
                         case messageType.wowCountdown: {
-                            let countDownDate = new Date("Oct 26, 2020 18:00:00").getTime();
+                            let countDownDate = new Date("Nov 23, 2020 18:00:00").getTime();
                               // Get today's date and time
                               let now = new Date().getTime();
 
@@ -244,7 +257,7 @@ client.on('message', async message => {
                                 precision: 'seconds'    // TODO: does not handle small amounts of time well. eg 3h 25mins etc
                             });
 
-                            let title = 'WoW Shadowlands Release!';
+                            let title = 'WoW Shadowlands Release on the worst possible week of the year!';
                             let embedmsg;
                             message.channel.send({ embed: embeds(message.author.tag, days, hours, minutes, title) }).then( m => embedmsg = m);
 
@@ -284,6 +297,27 @@ client.on('message', async message => {
         }
     }
 });
+
+async function getRaiderIOScores(message, user, realm){
+    let url = 'https://raider.io/api/v1/characters/profile?region=us&realm=' + realm +'&name=' + user + '&fields=mythic_plus_scores_by_season:previous';
+    console.log(url);
+    axios.get(url)
+    .then(function (response) {
+        // handle success
+        //console.log(response);
+        let data = response.data;
+        console.log(data.mythic_plus_scores_by_season);
+        if (data.mythic_plus_scores_by_season[0].scores)
+        message.channel.send("Raider.IO Score for "+ user + "-" + realm + ": " + data.mythic_plus_scores_by_season[0].scores.all)
+    })
+    .catch(function (error) {
+        // handle error
+        console.log(error);
+    })
+    .then(function () {
+        // always executed
+    });
+};
 
 async function playSoundFile(message){
     
