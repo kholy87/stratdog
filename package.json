@@ -6,16 +6,16 @@
   "dependencies": {
     "@discordjs/opus": "^0.3.3",
     "Buffer": "0.0.0",
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "blizzard.js": "^3.2.0",
-    "canvas": "^2.6.1",
-    "discord.js": "^12.4.1",
+    "canvas": "^2.7.0",
+    "discord.js": "^12.5.3",
     "easytimer": "^1.1.1",
-    "easytimer.js": "^4.3.0",
-    "electron": "^10.1.5",
-    "ffmpeg-static": "^4.2.7",
-    "simple-oauth2": "^4.1.0",
-    "ytdl-core": "^4.0.0"
+    "easytimer.js": "^4.3.4",
+    "electron": "^10.4.3",
+    "ffmpeg-static": "^4.3.0",
+    "simple-oauth2": "^4.2.0",
+    "ytdl-core": "^4.5.0"
   },
   "devDependencies": {},
   "scripts": {
