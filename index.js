@@ -5,13 +5,10 @@ const embeds = require('./embeds.js');
 const axios = require('axios');
 const ytdl = require('ytdl-core');
 const playlistEmbeds = require('./playlist.js');
-const grioEmbeds = require('./embeds/grio.js');
 const timerlib = require('easytimer.js').Timer;
 const client = new Discord.Client();
 const Canvas = require('canvas');
-const simpleOauth2 = require("simple-oauth2");
 const prefix = '!';
-const ownerId = config.ownerId;
 
 var b64string = config.BNET_ID + ":" + config.BNET_SECRET;
 var buf = Buffer.from(b64string, 'base64'); // Ta-da
@@ -56,15 +53,20 @@ function setUserRole(userId){
 };
 
 const userIntroSongs = {
-    "119896928745029632": { type: messageType.sound, file: 'joeintro2'},
-    "118892076627787776": { type: messageType.sound, file: 'holyintro2' },
-    "184466926901133313": { type: messageType.sound, file: 'mattintro2'},
+    "119896928745029632": { type: messageType.sound, file: ['joeintro', 'joeintro2', 'joeintro3', 'joeintro4', 'hitit']},
+    "118892076627787776": { type: messageType.sound, file: ['holyintro2', 'holyintro', 'holyintro3'] },
+    "184466926901133313": { type: messageType.sound, file: ['mattintro', 'mattintro2']},
     "112676666102292480": { type: messageType.sound, file: 'snipesintro'},
-    "226819805968203787": { type: messageType.sound, file: 'kenintro'},
-    "138114465718599680": { type: messageType.sound, file: 'tonyintro2'},
+    "226819805968203787": { type: messageType.sound, file: 'trash'},
+    "138114465718599680": { type: messageType.sound, file: ['tonyintro', 'tonyintro2']},
     "107662388752306176": { type: messageType.sound, file: 'teddyintro'},
     "320757397234778123": { type: messageType.sound, file: 'archie'},
-    "321491932629172224": { type: messageType.sound, file: 'cam'}
+    "321491932629172224": { type: messageType.sound, file: 'cam2'},
+    "184770803215106048": { type: messageType.sound, file: 'winzintro'},
+    "229683033798737923": { type: messageType.sound, file: 'willintro'},
+    "184630124442943488": { type: messageType.sound, file: 'tomintro'},
+    "66050601422692352": { type: messageType.sound, file: 'sneeze'},
+    "248222937637847050": { type: messageType.sound, file: 'paffy'}
     
 }
 
@@ -107,6 +109,7 @@ const commands = {
     earlobe: { type: messageType.sound, file: 'earlobe', role: securityRole.user},
     scream: { type: messageType.sound, file: 'scream', role: securityRole.user},
     sneeze: { type: messageType.sound, file: 'sneeze', role: securityRole.user},
+    sneeze2: { type: messageType.sound, file: 'sneeze2', role: securityRole.user},
     //pacman: { type: messageType.sound, file: 'pacman', role: securityRole.user},
     //cube: { type: messageType.sound, file: 'cube', role: securityRole.user},
     welost: { type: messageType.sound, file: 'welost', role: securityRole.user},
@@ -135,9 +138,40 @@ const commands = {
     slownoyes: { type: messageType.sound, file: 'slownoyes', role: securityRole.user},
     istupid: { type: messageType.sound, file: 'istupid', role: securityRole.user},
     rox: { type: messageType.sound, file: 'rox', role: securityRole.user },
+    rox2: { type: messageType.sound, file: 'rox2', role: securityRole.user },
+    rox3: { type: messageType.sound, file: 'rox3', role: securityRole.user },
     wyze: { type: messageType.sound, file: 'wyze', role: securityRole.user },
-    cam: { type: messageType.sound, file: 'cam', role: securityRole.user },
-    failed: { type: messageType.sound, file: 'failed', role: securityRole.user }
+    cam: { type: messageType.sound, file: 'cam2', role: securityRole.user },
+    '<@!321491932629172224>': {type: messageType.sound, file: 'cam', role: securityRole.user},
+    failed: { type: messageType.sound, file: 'failed', role: securityRole.user },
+    carried: { type: messageType.sound, file: 'carried', role: securityRole.user },
+    helpout: { type: messageType.sound, file: 'helpout', role: securityRole.user },
+    joe: { type: messageType.sound, file: 'joeintro3', role: securityRole.user },
+    '<@!119896928745029632>': { type: messageType.sound, file: 'joeintro3', role: securityRole.user },
+    spiderman: { type: messageType.sound, file: 'spiderman', role: securityRole.user },
+    will: { type: messageType.sound, file: 'willintro', role: securityRole.user },
+    winz: { type: messageType.sound, file: 'winzintro', role: securityRole.user },
+    points: { type: messageType.sound, file: 'points', role: securityRole.user },
+    sitting: { type: messageType.sound, file: 'sitting', role: securityRole.user },
+    clap: { type: messageType.sound, file: 'clap', role: securityRole.user },
+    matt: { type: messageType.sound, file: 'mattintro2', role: securityRole.user },
+    trash: { type: messageType.sound, file: 'trash', role: securityRole.user },
+    shitgame: { type: messageType.sound, file: 'shitgame', role: securityRole.user },
+    hitit: { type: messageType.sound, file: 'hitit', role: securityRole.user },
+    littering: { type: messageType.sound, file: 'littering', role: securityRole.user },
+    candybars: { type: messageType.sound, file: 'candybars', role: securityRole.user },
+    enhance: { type: messageType.sound, file: 'enhance', role: securityRole.user },
+    todd: { type: messageType.sound, file: 'todd', role: securityRole.user },
+    keysrus: { type: messageType.sound, file: 'keysrus', role: securityRole.user },
+    bleed: { type: messageType.sound, file: 'bleed', role: securityRole.user },
+    dumber: { type: messageType.sound, file: 'dumber', role: securityRole.user },
+    knowyou: { type: messageType.sound, file: 'knowyou', role: securityRole.user },
+    wrench: { type: messageType.sound, file: 'wrench', role: securityRole.user },
+    queerbag: { type: messageType.sound, file: 'queerbag', role: securityRole.user },
+    puke: { type: messageType.sound, file: 'puke', role: securityRole.user },
+    mate: { type: messageType.sound, file: 'mate', role: securityRole.user },
+    fast: { type: messageType.sound, file: 'fast', role: securityRole.user },
+    interesting: { type: messageType.sound, file: 'interesting', role: securityRole.user }
 };
 
 var playlist = [];
@@ -211,17 +245,27 @@ client.on('voiceStateUpdate', (oldState, newState) => {
     introInfo = userIntroSongs[newState.id];
     if (oldState.channelID !== newState.channelID){
         if (introInfo !== undefined && newState.channelID === '784295420322775040'){
-            playlist.push(introInfo);
+            if (Array.isArray(introInfo.file)){
+                let randomIntroFile = introInfo.file[Math.floor(Math.random()*introInfo.file.length)];
+                playlist.push({ type: messageType.sound, file: randomIntroFile})
+                console.log('Randomly selected ' + randomIntroFile + ' for user ' + newState.member.nickname)
+            } else {
+                playlist.push(introInfo);
+                console.log("Playing Intro for " + newState.member.nickname)
+            }
             if (!isPlaying){
                 playSoundFile(newState);
             }
-            console.log("Playing Intro for " + newState.member.nickname)
+            
         }
     }
  });
 
 client.on('message', async message => {
     if (message.author.bot) return;
+    if (message.channel.type === "dm"){
+        console.log(message)
+    } else {
     let userRole = setUserRole(message.author.id)
     let args = message.content.substring(prefix.length).split(' ');
     if (message.content.startsWith(prefix)){
@@ -398,6 +442,7 @@ client.on('message', async message => {
             }
         }
     }
+}
 });
 
 async function getRaiderIOScores(user, realm){
